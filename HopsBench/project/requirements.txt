@@ -1,0 +1,2 @@
+locustio==0.7.5
+snakebite==2.11.0

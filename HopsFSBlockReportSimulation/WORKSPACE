@@ -2,6 +2,7 @@ maven_jar(
 	name = "se_sics_kompics_kompics_core",
 	artifact = "se.sics.kompics:kompics-core:0.9.1-20160119.150341-3",
 	sha1 = "ae7f55ad89600a9af34c3a56bdb91985b1dbef4d",
+	server = "sics_snapshots",
 )
 maven_jar(
 	name = "junit_junit",
@@ -9,37 +10,45 @@ maven_jar(
 	sha1 = "7059d3d3bedc1fca9b33cde8503095b3576a0bba",
 )
 maven_jar(
+	name = "org_slf4j_slf4j_log4j12",
+	artifact = "org.slf4j:slf4j-log4j12:1.7.5",
+)
+maven_jar(
 	name = "org_slf4j_slf4j_api",
 	artifact = "org.slf4j:slf4j-api:1.7.5",
-	sha1 = "6b262da268f8ad9eff941b25503a9198f0a0ac93",
+)
+maven_jar(
+	name = "log4j_log4j",
+	artifact = "log4j:log4j:1.2.17",
+)
+maven_jar(
+	name = "org_apache_logging_log4j_log4j",
+	artifact = "org.apache.logging.log4j:log4j:2.8.2",
+)
+maven_jar(
+	name = "com_typesafe_config",
+	artifact = "com.typesafe:config:1.3.1",
 )
 maven_jar(
 	name = "com_google_guava_guava",
 	artifact = "com.google.guava:guava:18.0",
 	sha1 = "cce0823396aa693798f8882e64213b1772032b09",
 )
-maven_jar(
-	name = "com_typesafe_config",
-	artifact = "com.typesafe:config:1.2.1",
-	sha1 = "f771f71fdae3df231bcd54d5ca2d57f0bf93f467",
-)
-maven_jar(
-	name = "org_slf4j_slf4j_log4j12",
-	artifact = "org.slf4j:slf4j-log4j12:1.7.5",
-	sha1 = "6edffc576ce104ec769d954618764f39f0f0f10d",
-)
-maven_jar(
-	name = "log4j_log4j",
-	artifact = "log4j:log4j:1.2.17",
-	sha1 = "5af35056b4d257e4b64b9e8069c0746e8b08629f",
-)
+
 maven_jar(
 	name = "se_sics_kompics_basic_kompics_port_timer",
 	artifact = "se.sics.kompics.basic:kompics-port-timer:0.9.1-20160119.150350-3",
 	sha1 = "5791ba44cbcc41cf5416870e2e1ed2324f7484e7",
+	server = "sics_snapshots",
 )
 maven_jar(
 	name = "se_sics_kompics_basic_kompics_component_java_timer",
 	artifact = "se.sics.kompics.basic:kompics-component-java-timer:0.9.1-20160119.150408-3",
 	sha1 = "f06210f1d9a9a7779a2ed2257ea80d986bd62dbb",
+	server = "sics_snapshots",
+)
+
+maven_server(
+	name = "sics_snapshots",
+	url = "http://kompics.sics.se/maven/snapshotrepository",
 )

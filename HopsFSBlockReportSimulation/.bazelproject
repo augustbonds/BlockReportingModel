@@ -1,0 +1,5 @@
+directories:
+  src
+
+targets:
+  //src/main/java/io/hops/blockreportsimulation/main

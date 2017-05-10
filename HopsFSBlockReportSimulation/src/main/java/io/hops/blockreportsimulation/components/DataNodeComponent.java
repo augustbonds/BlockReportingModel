@@ -7,7 +7,8 @@ import io.hops.blockreportsimulation.events.BlockReport;
 import io.hops.blockreportsimulation.events.BlocksReceivedAndDeleted;
 import io.hops.blockreportsimulation.ports.NameNodeDataNodePort;
 import io.hops.blockreportsimulation.types.Replica;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.sics.kompics.ComponentDefinition;
 import se.sics.kompics.Handler;
 import se.sics.kompics.Positive;
@@ -21,7 +22,8 @@ import java.util.*;
 
 public class DataNodeComponent extends ComponentDefinition {
 
-    private static final Logger LOG = Logger.getLogger(DataNodeComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataNodeComponent
+        .class);
 
     //Ports
     private Positive<NameNodeDataNodePort> nnp = requires(NameNodeDataNodePort.class);

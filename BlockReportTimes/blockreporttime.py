@@ -32,23 +32,23 @@ def brTime(minBrTime, prevBrTime, prevChangesPerSecond, numBuckets, blocksPerDat
     numUncaughtChanges = prevBrTime * prevChangesPerSecond
     inconsistentBuckets = expectedNumInconsistentBuckets(numUncaughtChanges, numBuckets)
     numBlocksReported = inconsistentBuckets/numBuckets*blocksPerDatanode
-    return minBrTime + numBlocksReported/reportedBlocksPerSecondPerNamenode #0.001*inconsistentBuckets # TODO how should we calculate punishment for increased number of buckets?
+    return minBrTime + numBlocksReported/reportedBlocksPerSecondPerNamenode
 
 #from HopsFS paper
 # 100k blocks/s/nn block reporting performance
 print ("\nCalculating report time progression from startup")
 
-operationsPerSecond = 1250000
+operationsPerSecond = 1000000
 writePercentage = 2.7
 replicationFactor = 3
 
 rbsn = 100000
 blocksPerDn = 1000 * 1000
-numDns = 10000
+numDns = 1000
 numBuckets = 100 * 1000
 minTime = minBrTime(numBuckets, blocksPerDn)
 
-title = '{}k dns, {}k blocks/dn, {}k buckets, {}k block/s processing'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000)
+title = '{}k dns, {}k blocks/dn, {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
 
 cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
 
@@ -67,12 +67,12 @@ ys = []
 for x in range(1000):
     opss = operationsPerSecond * x
     time = 00 # irrespective of the starting time, the report time will stabilize
-    for i in range(10):
+    for i in range(1000):
         cps = changesPerDatanodePerSecond(opss, writePercentage, replicationFactor, numDns)
         time = brTime(minTime, time, cps, numBuckets, blocksPerDn, rbsn)
 
     y = float(time)
-    print('{} times spotify load, {} min br time, actual time {}'.format(x, minTime, y))
+    print('{}M ops/s, {} min br time, actual time {}'.format(x, minTime, y))
     xs.append(int(x))
     ys.append(y)
 
@@ -80,17 +80,6 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(xs,ys)
 ax.set_title(title)
-ax.set_xlabel('x times Spotify load')
+ax.set_xlabel('M ops/s')
 ax.set_ylabel('block report time (s) ')
 plt.show()
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,5 @@
-reated by https://www.gitignore.io/api/code-java,intellij+iml,maven
+bazel-*
+created by https://www.gitignore.io/api/code-java,intellij+iml,maven
 
 ### Code-Java ###
 # Language Support for Java(TM) by Red Hat extension for Visual Studio Code - https://marketplace.visualstudio.com/items?itemName=redhat.java

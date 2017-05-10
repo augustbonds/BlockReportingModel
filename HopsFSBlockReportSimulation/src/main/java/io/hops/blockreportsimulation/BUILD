@@ -8,7 +8,6 @@ java_library(
         ":ports",
         ":types",
         "@com_google_guava_guava//jar",
-        "@org_apache_logging_log4j_log4j//jar",
         "@org_slf4j_slf4j_api//jar",
         "@org_slf4j_slf4j_log4j12//jar",
         "@se_sics_kompics_basic_kompics_component_java_timer//jar",
@@ -59,11 +58,11 @@ java_binary(
     name = "main",
     srcs = glob(["Main.java"]),
     main_class = "io.hops.blockreportsimulation.Main",
+    resources = ["//src/main/resources:files"],
     deps = [
         ":components",
         "@com_typesafe_config//jar",
-        "@log4j_log4j//jar",
-        "@org_apache_logging_log4j_log4j//jar",
         "@se_sics_kompics_kompics_core//jar",
     ],
+    runtime_deps = ["@log4j_log4j//jar"],
 )

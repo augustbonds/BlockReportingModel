@@ -73,9 +73,19 @@ The key is using the sum of the hashes of the blocks to represent the bucket.
     // On the namenode side
     IncrementalReport = 
     
-# Tradeoffs between old and new reporting
-|  | Old Reporting | New Reporting |
-|: --- |: --- :| --- |
+# Trade-offs between old and new reporting
+| | Old Reporting | New Reporting |
+| --- :|: --- :|: --- :|
 | DN - NN bandwidth | ~ 30 bytes * num blocks | ~ 30 bytes * num blocks |
 | NN - DB bandwidth | 
 
+
+# Failure scenarios and how they are handled
+
+## Mass disk failure
+
+## Temporary NameNode slow-down and blocking of reports
+
+## Cluster Start-Up and exiting safe mode
+
+## Massive block movement (e.g. server migration)

@@ -76,9 +76,10 @@ The key is using the sum of the hashes of the blocks to represent the bucket.
 # Trade-offs between old and new reporting
 | | Old Reporting | New Reporting |
 | --- :|: --- :|: --- :|
-| DN - NN bandwidth | ~ 30 bytes * num blocks | ~ 30 bytes * num blocks |
-| NN - DB bandwidth | 
-
+| DN - NN bandwidth | ~30 bytes * #blocks | ~30 bytes * #blocks |
+| NN - DB bandwidth (worst case)|~30 bytes * #blocks |~30 bytes * #blocks|
+| NN - DB bandwidth (best case)| ~30 bytes * #blocks | ~8 bytes * #hashes |
+| NN - DB bandwidth (average case)| ~30 bytes * #blocks | depends, see table 2|
 
 # Failure scenarios and how they are handled
 

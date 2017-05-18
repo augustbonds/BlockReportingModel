@@ -1,0 +1,31 @@
+digraph hello {
+//A = Replica Recovery Starts
+//B = DN Dies
+graph [layout=fdp]
+node [shape=circle]
+TEMP [label="TEMP"]
+INIT [label="Init"]
+FINALIZED [label="FIN"]
+RBW [label="RBW"]
+RUR [label="RUR"]
+RWR [label="RWR"]
+DEL [label="Del"]
+
+INIT->RBW [label="D"] //Create
+INIT->TEMP [label="replicate/copy for balancing"]
+
+TEMP->DEL [label="failed copy/DN restart"]
+TEMP->FINALIZED [label="replicate/copy success"]
+
+FINALIZED->RUR [label="A"] //Replica Recovery Starts
+FINALIZED->RBW [label="Append/Append Recovery"]
+FINALIZED->FINALIZED [label="Close Recovery"]
+
+RUR->RUR [label="A"] //Replica Recovery Starts
+RUR->RBW [label="B"] //DN Dies
+RUR->FINALIZED [label="C"] //Replica Recovery Finishes
+
+RWR->RBW [label="B"] //DN Dies
+RWR->RUR [label="A"] //Replica Recovery Starts
+
+}

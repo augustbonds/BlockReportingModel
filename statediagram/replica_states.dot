@@ -1,7 +1,7 @@
 digraph hello {
 //A = Replica Recovery Starts
 //B = DN Dies
-graph [layout=fdp]
+graph [layout=twopi]
 node [shape=circle]
 TEMP [label="TEMP"]
 INIT [label="Init"]
@@ -12,14 +12,16 @@ RWR [label="RWR"]
 DEL [label="Del"]
 
 INIT->RBW [label="D"] //Create
-INIT->TEMP [label="replicate/copy for balancing"]
+INIT->TEMP [label="E"] //start copy for balancing
 
-TEMP->DEL [label="failed copy/DN restart"]
-TEMP->FINALIZED [label="replicate/copy success"]
+TEMP->DEL [label="F"]//failed copy for balancing
+TEMP->DEL [label="B"]
+TEMP->FINALIZED [label="G"]//success copy for balancing
 
 FINALIZED->RUR [label="A"] //Replica Recovery Starts
-FINALIZED->RBW [label="Append/Append Recovery"]
-FINALIZED->FINALIZED [label="Close Recovery"]
+FINALIZED->RBW [label="J"] //Append
+FINALIZED->RBW [label="I"] //Append Recovery
+FINALIZED->FINALIZED [label="H"]//Close Recovery
 
 RUR->RUR [label="A"] //Replica Recovery Starts
 RUR->RBW [label="B"] //DN Dies
@@ -28,4 +30,8 @@ RUR->FINALIZED [label="C"] //Replica Recovery Finishes
 RWR->RBW [label="B"] //DN Dies
 RWR->RUR [label="A"] //Replica Recovery Starts
 
+RBW->RBW [label="K"] //write
+RBW->RBW [label="L"] //Pipeline Recovery
+RBW->RUR [label="B"]
+RBW->FINALIZED [label="M"] //close
 }

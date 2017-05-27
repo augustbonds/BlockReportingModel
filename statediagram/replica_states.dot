@@ -1,7 +1,7 @@
 digraph hello {
 //A = Replica Recovery Starts
 //B = DN Dies
-graph [layout=twopi]
+graph [layout=neato]
 node [shape=circle]
 TEMP [label="TEMP"]
 INIT [label="Init"]

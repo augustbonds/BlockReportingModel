@@ -1,0 +1,54 @@
+How block reports are processsed
+
+A block report consists of a list of blocks with corresponding states.
+It is created in FsDatasetImpl.getBlockReport() by looking at all blocks present in the in-memory map, and converting them into block report items according to the following logic:
+
+if (state == FINALIZED)
+	add block as finalized
+if (state == RBW || state == RWR)
+	add block as under construction
+if (state == RUR)
+	add original block (FINALIZED, RBW or RWR)
+	//Keep in mind: RWR replicas were RBW replicas before a datanode restart happened
+if (state == TEMPORARY)
+	ignored.
+
+According to this logic, the possible replica states in the block report are:
+FINALIZED, RBW, RWR
+
+
+Now over to the block report processing
+
+If the namenode does not know of any replicas on the datanode, a special case processFirstBlockReport is invoked.
+
+In all other cases, the same process takes place: processReport
+
+PROCESS_REPORT
+
+toAdd <- will contain all blocks that should be added to the namenode
+toRemove <- will contain all blocks that should be removed from the namenode
+toInvalidate <- will contain blocks which do not have referencing files anymore and should be deleted from datanodes
+toCorrupt <- will contain blocks which are outdated or corrupt and should be deleted from the datanodes
+
+reportDiff takes the report and the lists defined above, and populates them based on the report and the namenode state.
+
+
+
+
+
+Block States
+Block and Replica states serve different purposes.
+Block states tell what the overall state of the block is, with respect to its different replicas, and the replica state tells what is the state of that specific replica.
+
+There are four different Block states:
+COMPLETE - The block has at least one FINALIZED replica and will not be modified
+UNDER_CONSTRUCTION - The block is under construction meaning it has recently been allocated for write or append
+UNDER_RECOVERY - The block was not complete when the client lease expired and has to be recovered
+COMMITTED - The client has reported that all bytes have been written, but the datanodes have not reported any complete replicas yet.
+
+
+
+JIRAs related to design of block report processing
+https://issues.apache.org/jira/browse/HDFS-2791
+https://issues.apache.org/jira/browse/HDFS-1295
+

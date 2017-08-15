@@ -1,6 +1,6 @@
-<map version="freeplane 1.2.0">
+<map version="freeplane 1.3.0">
 <!--To view this file, download free mind mapping software Freeplane from http://freeplane.sourceforge.net -->
-<node TEXT="root" ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1496820922146"><hook NAME="MapStyle">
+<node TEXT="Execution paths that alter namenode state (replicas)" ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1499848016749"><hook NAME="MapStyle">
 
 <map_styles>
 <stylenode LOCALIZED_TEXT="styles.root_node">

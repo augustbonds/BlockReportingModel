@@ -1,0 +1,20 @@
+1. incremental report and full report should share code
+2. full report always sends a hash of ALL replicas in that report, also non-finalized ones.
+3. incremental report only updates hash for finalized replicas that get stored.
+
+result:
+  if hashes match, all finalized replicas have been processed at least once.
+
+
+
+When full reporting, buckets are read without locks, allowing for concurrent modifications. That means that any updates that happen after the block report is sent but before that bucket has been processed will end up with a hash mismatch. 
+
+
+What kind of evaluation can we do?
+
+1. How big is the overhead compared to the old way. Buckets locking, bigger messages, calculation of hashes.
+2. How big are the performance improvements for normal operation? How much bigger load can we handle with the same number of buckets and datanodes?
+  2.1 performance when increasing number of writes vs old way
+  2.2 performance when datanodes dying vs old way
+  2.3 performance when increasing writes and increasing number of nodes
+

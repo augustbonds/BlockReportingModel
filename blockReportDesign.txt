@@ -18,3 +18,38 @@ What kind of evaluation can we do?
   2.2 performance when datanodes dying vs old way
   2.3 performance when increasing writes and increasing number of nodes
 
+
+
+FAQ:
+Q: What if there is a block recovery? Can't you end up in a state where the hashes match, but the block generation stamp has been increased and so there is a stale replica?
+A: Hashes are only updated on FINALIZED, not on recovery update. Therefore, there hashes won't match and so full report for that bucket will be performed.
+
+Q: How can we be sure that an incremental block report will have the same effect as that same block being reported in the full report? Why is it enough with the incremental report?
+A: As of now, the logic is duplicated. This needs refactoring so that both types of reports give the same guarantees. For now you have my word that they do the same thing.
+
+Q: What if there is a lot of concurrent writes?
+A: If the number of buckets is too low, all hashes will mismatch because of inconsistencies introduced during report processing. In the future, the hashes could be sent separately to speed up the reporting.
+TODO-list writing thesis, Monday August 14
+
+1. write reasoning about solution #1
+2. add append-adjustment, then reasoning about solution #2
+3. write about stale replicas when trusting hashes
+
+(5. write about using old style block report once every 24h or so) 
+(4. write about conflict-free replicated datatypes) [x]
+
+
+Target: 8 pages  (would result in 21)
+
+
+Goal until Wednesday: 40 pages, OK to undershoot slightly.
+
+On Tuesday evening, interview with OP5
+Wednesday evening Draft hand-in.
+
+
+At some point, have to do benchmarks. What benchmarks should i do?
+(instead of benchmark, can do complexity analysis for different block report, partly already done, check blogpost in MasterThesisTools)
+- Block reporting speed no concurrent modifications
+
+

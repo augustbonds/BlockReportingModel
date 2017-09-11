@@ -1,0 +1,24 @@
+1 NN 5 clients HOPS-64, bbc6,7 cloud11
+
+MKDIR 1372.56 ops/sec.  Successful-Ops: 27480.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.03 No of Expected NNs 1 No of Actual Alive NNs 1
+CREATE_FILE 592.21 ops/sec.  Successful-Ops: 11850.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.02 No of Expected NNs 1 No of Actual Alive NNs 1
+APPEND_FILE 461.74 ops/sec.  Successful-Ops: 9237.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+READ_FILE 1886.97 ops/sec.  Successful-Ops: 37777.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.02 No of Expected NNs 1 No of Actual Alive NNs 1
+LS_FILE 2202.43 ops/sec.  Successful-Ops: 44053.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+LS_DIR 1443.51 ops/sec.  Successful-Ops: 28873.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+RENAME_FILE 559.73 ops/sec.  Successful-Ops: 11208.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.03 No of Expected NNs 1 No of Actual Alive NNs 1
+DEL_FILE 931.51 ops/sec.  Successful-Ops: 11900.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 12.78 No of Expected NNs 1 No of Actual Alive NNs 1
+
+
+1 NN 5 clients master, bbc6,7 cloud11
+MKDIR 1409.04 ops/sec.  Successful-Ops: 28185.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+CREATE_FILE 589.14 ops/sec.  Successful-Ops: 11788.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+APPEND_FILE 474.07 ops/sec.  Successful-Ops: 9486.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.02 No of Expected NNs 1 No of Actual Alive NNs 1
+READ_FILE 1832.73 ops/sec.  Successful-Ops: 36660.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+LS_FILE 2183.29 ops/sec.  Successful-Ops: 43670.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+LS_DIR 1448.07 ops/sec.  Successful-Ops: 28967.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+RENAME_FILE 600.66 ops/sec.  Successful-Ops: 12018.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 20.01 No of Expected NNs 1 No of Actual Alive NNs 1
+DEL_FILE 998.66 ops/sec.  Successful-Ops: 11838.0 Failed-Ops: 0.0 Avg-Test-Duration-sec 11.86 No of Expected NNs 1 No of Actual Alive NNs 1
+
+
+

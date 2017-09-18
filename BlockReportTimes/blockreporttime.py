@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
     Assuming the blocks are spread evenly across the cluster, and the block modifications too
 '''
 def changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationLevel, numDatanodes):
-    return math.ceil(operationsPerSecond*writePercentage/100*replicationLevel/numDatanodes)
+    return math.ceil(operationsPerSecond*writePercentage/100.0*replicationLevel/numDatanodes)
 
 print ("Spotify workload")
 operationsPerSecond = 1250000
@@ -20,8 +20,10 @@ for numDns in [1000,2000,5000,10000,20000,50000]:
 
 
 def minBrTime(numBuckets, numBlocks):
-    bandwidth = 1000 * 1000 * 1000
-    return numBlocks * 30 * 8 / bandwidth #ignore buckets since they hardly matter
+    #bandwidth = 1000 * 1000 * 1000
+    #return 0.150 + numBuckets * 8 / float(bandwidth)
+    bandwidth = 10 * 1000 * 1000 * 1000
+    return 0.15 + numBlocks * 30 * 8 / float(bandwidth) #ignore buckets since they hardly matter
 
 def expectedNumInconsistentBuckets(numChanges, numBuckets):
     #as per https://math.stackexchange.com/a/868454
@@ -43,9 +45,9 @@ writePercentage = 2.7
 replicationFactor = 3
 
 rbsn = 100000
-blocksPerDn = 1000 * 1000
+blocksPerDn = 5000 * 1000
 numDns = 1000
-numBuckets = 100 * 1000
+numBuckets = 1000
 minTime = minBrTime(numBuckets, blocksPerDn)
 
 title = '{}k dns, {}k blocks/dn, {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
@@ -64,9 +66,9 @@ for i in range(20):
 xs = []
 ys = []
 
-for x in range(1000):
+for x in range(5):
     opss = operationsPerSecond * x
-    time = 00 # irrespective of the starting time, the report time will stabilize
+    time = minBrTime(numBuckets, blocksPerDn) # irrespective of the starting time, the report time will stabilize
     for i in range(1000):
         cps = changesPerDatanodePerSecond(opss, writePercentage, replicationFactor, numDns)
         time = brTime(minTime, time, cps, numBuckets, blocksPerDn, rbsn)
@@ -77,9 +79,11 @@ for x in range(1000):
     ys.append(y)
 
 fig = plt.figure()
+
 ax = fig.add_subplot(111)
 ax.plot(xs,ys)
 ax.set_title(title)
 ax.set_xlabel('M ops/s')
 ax.set_ylabel('block report time (s) ')
+ax.set_ylim([0,12])
 plt.show()

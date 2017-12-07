@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import math
 import matplotlib.pyplot as plt
-#Changes per datanode per second
+import sys
 
 '''
     Assuming the blocks are spread evenly across the cluster, and the block modifications too
@@ -40,17 +40,24 @@ def brTime(minBrTime, prevBrTime, prevChangesPerSecond, numBuckets, blocksPerDat
 # 100k blocks/s/nn block reporting performance
 print ("\nCalculating report time progression from startup")
 
-operationsPerSecond = 1000000
+
+numDns = 1000
+blocksPerDn = 1000 * 1000
+rbsn = 100000
+numBuckets = 2000
+
+if (len(sys.argv) == 5):
+    numDns = sys.argv[1]
+    blocksPerDn = sys.argv[2]
+    rbsn = sys.argv[3]
+    numBuckets = sys.argv[4]
+
+operationsPerSecond = 500000
 writePercentage = 2.7
 replicationFactor = 3
-
-rbsn = 100000
-blocksPerDn = 5000 * 1000
-numDns = 1000
-numBuckets = 1000
 minTime = minBrTime(numBuckets, blocksPerDn)
 
-title = '{}k dns, {}k blocks/dn, {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
+title = '{}k dns, {}k blocks/dn,\n {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
 
 cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
 
@@ -66,7 +73,7 @@ for i in range(20):
 xs = []
 ys = []
 
-for x in range(5):
+for x in range(10):
     opss = operationsPerSecond * x
     time = minBrTime(numBuckets, blocksPerDn) # irrespective of the starting time, the report time will stabilize
     for i in range(1000):
@@ -86,4 +93,4 @@ ax.set_title(title)
 ax.set_xlabel('M ops/s')
 ax.set_ylabel('block report time (s) ')
 ax.set_ylim([0,12])
-plt.show()
+plt.savefig('{}kdns{}kblocks{}kbuckets{}kblockspersec{}percentwrites.png'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage))

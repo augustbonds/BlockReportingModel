@@ -9,14 +9,14 @@ import sys
 def changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationLevel, numDatanodes):
     return math.ceil(operationsPerSecond*writePercentage/100.0*replicationLevel/numDatanodes)
 
-print ("Spotify workload")
+#print ("Spotify workload")
 operationsPerSecond = 1250000
 writePercentage = 2.7
 replicationFactor = 3
-print("{} ops/s, {}% writes, replication factor {}".format(operationsPerSecond, writePercentage, replicationFactor))
-for numDns in [1000,2000,5000,10000,20000,50000]:
-    cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
-    print ("for {} datanodes, {} changes per dn per second".format(numDns, cds))
+#print("{} ops/s, {}% writes, replication factor {}".format(operationsPerSecond, writePercentage, replicationFactor))
+#for numDns in [1000,2000,5000,10000,20000,50000]:
+#    cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
+#    print ("for {} datanodes, {} changes per dn per second".format(numDns, cds))
 
 
 def minBrTime(numBuckets, numBlocks):
@@ -38,7 +38,6 @@ def brTime(minBrTime, prevBrTime, prevChangesPerSecond, numBuckets, blocksPerDat
 
 #from HopsFS paper
 # 100k blocks/s/nn block reporting performance
-print ("\nCalculating report time progression from startup")
 
 
 numDns = 1000
@@ -47,11 +46,15 @@ rbsn = 100000
 numBuckets = 2000
 
 if (len(sys.argv) == 5):
-    numDns = sys.argv[1]
-    blocksPerDn = sys.argv[2]
-    rbsn = sys.argv[3]
-    numBuckets = sys.argv[4]
+    numDns = int(sys.argv[1])
+    blocksPerDn = int(sys.argv[2])
+    rbsn = int(sys.argv[3])
+    numBuckets = int(sys.argv[4])
+else:
+    print ("blockreporttime.py numDns blocksPerDn rbsn numBuckets")
+    exit()
 
+print ("\nCalculating block report times")
 operationsPerSecond = 500000
 writePercentage = 2.7
 replicationFactor = 3
@@ -89,8 +92,12 @@ fig = plt.figure()
 
 ax = fig.add_subplot(111)
 ax.plot(xs,ys)
-ax.set_title(title)
+#ax.set_title(title)
 ax.set_xlabel('M ops/s')
 ax.set_ylabel('block report time (s) ')
 ax.set_ylim([0,12])
-plt.savefig('{}kdns{}kblocks{}kbuckets{}kblockspersec{}percentwrites.png'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage))
+
+filename = '{}kdns{}kblocks{}kbuckets{}kblockspersec{}percentwrites.png'.format(int(numDns/1000), int(blocksPerDn/1000), int(numBuckets/1000), int(rbsn/1000), writePercentage)
+
+plt.savefig(filename)
+print ('Saved output to {}'.format(filename))

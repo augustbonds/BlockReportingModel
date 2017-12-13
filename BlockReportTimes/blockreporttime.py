@@ -18,12 +18,13 @@ replicationFactor = 3
 #    cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
 #    print ("for {} datanodes, {} changes per dn per second".format(numDns, cds))
 
+networkLatency = 0.001
 
 def minBrTime(numBuckets, numBlocks):
     #bandwidth = 1000 * 1000 * 1000
     #return 0.150 + numBuckets * 8 / float(bandwidth)
     bandwidth = 10 * 1000 * 1000 * 1000
-    return 0.15 + numBlocks * 30 * 8 / float(bandwidth) #ignore buckets since they hardly matter
+    return networkLatency + numBlocks * 30 * 8 / float(bandwidth) #ignore buckets since they hardly matter
 
 def expectedNumInconsistentBuckets(numChanges, numBuckets):
     #as per https://math.stackexchange.com/a/868454
@@ -34,7 +35,8 @@ def brTime(minBrTime, prevBrTime, prevChangesPerSecond, numBuckets, blocksPerDat
     numUncaughtChanges = prevBrTime * prevChangesPerSecond
     inconsistentBuckets = expectedNumInconsistentBuckets(numUncaughtChanges, numBuckets)
     numBlocksReported = inconsistentBuckets/numBuckets*blocksPerDatanode
-    return minBrTime + numBlocksReported/reportedBlocksPerSecondPerNamenode
+    diffTime = numBlocksReported/reportedBlocksPerSecondPerNamenode
+    return minBrTime + diffTime
 
 #from HopsFS paper
 # 100k blocks/s/nn block reporting performance

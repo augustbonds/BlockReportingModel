@@ -9,10 +9,10 @@ echo "Installing build dependencies"
 sudo apt install autoconf cmake g++ -y
 
 echo "Preparing to get protoc and libndbclient"
-mkdir deps
+mkdir -p deps
 cd deps
 
-echo "Installing protoc 3.2"
+#echo "Installing protoc 3.2"
 # Make sure you grab the latest version
 protocv=3.2.0
 protoczip=protoc-$protocv-linux-x86_64.zip

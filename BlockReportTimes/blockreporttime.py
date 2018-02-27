@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import math
 import matplotlib.pyplot as plt
-#Changes per datanode per second
+import sys
 
 '''
     Assuming the blocks are spread evenly across the cluster, and the block modifications too
@@ -9,21 +9,22 @@ import matplotlib.pyplot as plt
 def changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationLevel, numDatanodes):
     return math.ceil(operationsPerSecond*writePercentage/100.0*replicationLevel/numDatanodes)
 
-print ("Spotify workload")
+#print ("Spotify workload")
 operationsPerSecond = 1250000
 writePercentage = 2.7
 replicationFactor = 3
-print("{} ops/s, {}% writes, replication factor {}".format(operationsPerSecond, writePercentage, replicationFactor))
-for numDns in [1000,2000,5000,10000,20000,50000]:
-    cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
-    print ("for {} datanodes, {} changes per dn per second".format(numDns, cds))
+#print("{} ops/s, {}% writes, replication factor {}".format(operationsPerSecond, writePercentage, replicationFactor))
+#for numDns in [1000,2000,5000,10000,20000,50000]:
+#    cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
+#    print ("for {} datanodes, {} changes per dn per second".format(numDns, cds))
 
+networkLatency = 0.001
 
 def minBrTime(numBuckets, numBlocks):
     #bandwidth = 1000 * 1000 * 1000
     #return 0.150 + numBuckets * 8 / float(bandwidth)
     bandwidth = 10 * 1000 * 1000 * 1000
-    return 0.15 + numBlocks * 30 * 8 / float(bandwidth) #ignore buckets since they hardly matter
+    return networkLatency + numBlocks * 30 * 8 / float(bandwidth) #ignore buckets since they hardly matter
 
 def expectedNumInconsistentBuckets(numChanges, numBuckets):
     #as per https://math.stackexchange.com/a/868454
@@ -34,23 +35,34 @@ def brTime(minBrTime, prevBrTime, prevChangesPerSecond, numBuckets, blocksPerDat
     numUncaughtChanges = prevBrTime * prevChangesPerSecond
     inconsistentBuckets = expectedNumInconsistentBuckets(numUncaughtChanges, numBuckets)
     numBlocksReported = inconsistentBuckets/numBuckets*blocksPerDatanode
-    return minBrTime + numBlocksReported/reportedBlocksPerSecondPerNamenode
+    diffTime = numBlocksReported/reportedBlocksPerSecondPerNamenode
+    return minBrTime + diffTime
 
 #from HopsFS paper
 # 100k blocks/s/nn block reporting performance
-print ("\nCalculating report time progression from startup")
 
-operationsPerSecond = 1000000
+
+numDns = 1000
+blocksPerDn = 1000 * 1000
+rbsn = 100000
+numBuckets = 2000
+
+if (len(sys.argv) == 5):
+    numDns = int(sys.argv[1])
+    blocksPerDn = int(sys.argv[2])
+    rbsn = int(sys.argv[3])
+    numBuckets = int(sys.argv[4])
+else:
+    print ("blockreporttime.py numDns blocksPerDn rbsn numBuckets")
+    exit()
+
+print ("\nCalculating block report times")
+operationsPerSecond = 500000
 writePercentage = 2.7
 replicationFactor = 3
-
-rbsn = 100000
-blocksPerDn = 5000 * 1000
-numDns = 1000
-numBuckets = 1000
 minTime = minBrTime(numBuckets, blocksPerDn)
 
-title = '{}k dns, {}k blocks/dn, {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
+title = '{}k dns, {}k blocks/dn,\n {}k buckets, {}k block/s processing, {}% writes'.format(numDns/1000, blocksPerDn/1000, numBuckets/1000, rbsn/1000, writePercentage)
 
 cds = changesPerDatanodePerSecond(operationsPerSecond, writePercentage, replicationFactor, numDns)
 
@@ -66,7 +78,7 @@ for i in range(20):
 xs = []
 ys = []
 
-for x in range(5):
+for x in range(10):
     opss = operationsPerSecond * x
     time = minBrTime(numBuckets, blocksPerDn) # irrespective of the starting time, the report time will stabilize
     for i in range(1000):
@@ -82,8 +94,12 @@ fig = plt.figure()
 
 ax = fig.add_subplot(111)
 ax.plot(xs,ys)
-ax.set_title(title)
+#ax.set_title(title)
 ax.set_xlabel('M ops/s')
 ax.set_ylabel('block report time (s) ')
 ax.set_ylim([0,12])
-plt.show()
+
+filename = '{}kdns{}kblocks{}kbuckets{}kblockspersec{}percentwrites.png'.format(int(numDns/1000), int(blocksPerDn/1000), int(numBuckets/1000), int(rbsn/1000), writePercentage)
+
+plt.savefig(filename)
+print ('Saved output to {}'.format(filename))
